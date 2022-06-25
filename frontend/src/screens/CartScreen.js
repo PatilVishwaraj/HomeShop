@@ -71,7 +71,7 @@ export default function CartScreen() {
                           variant="outlined"
                           disabled={item.quantity === 1}
                         >
-                          <RemoveCircleOutlineIcon></RemoveCircleOutlineIcon>
+                          <RemoveCircleOutlineIcon />
                         </Button>
                         <Button variant="outlined">{item.quantity}</Button>
                         <Button
@@ -81,7 +81,7 @@ export default function CartScreen() {
                           variant="outlined"
                           disabled={item.quantity === item.countInStock}
                         >
-                          <AddCircleOutlineIcon></AddCircleOutlineIcon>
+                          <AddCircleOutlineIcon />
                         </Button>
                       </ButtonGroup>
                     </Col>
@@ -91,7 +91,7 @@ export default function CartScreen() {
                         onClick={() => removeItemHandeler(item)}
                         variant="outlined"
                       >
-                        <DeleteOutlineIcon></DeleteOutlineIcon>
+                        <DeleteOutlineIcon />
                       </Button>
                     </Col>
                   </Row>

@@ -40,7 +40,7 @@ export default function HomeScreen() {
     <div>
       <div className="row center">
         {loading ? (
-          <Loading></Loading>
+          <Loading />
         ) : error ? (
           <Popup variant="error">{error}</Popup>
         ) : (

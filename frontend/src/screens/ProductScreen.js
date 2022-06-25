@@ -58,7 +58,7 @@ export default function ProductScreen() {
   };
 
   return loading ? (
-    <Loading></Loading>
+    <Loading />
   ) : error ? (
     <Popup variant="error">{error}</Popup>
   ) : (
