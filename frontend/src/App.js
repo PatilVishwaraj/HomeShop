@@ -23,7 +23,7 @@ function App() {
             <Route path="/signin" element={<SigninScreen />}></Route>
             <Route path="/" element={<HomeScreen />}></Route>
           </Routes>
-          <Footer></Footer>
+          <Footer />
         </main>
       </div>
     </BrowserRouter>

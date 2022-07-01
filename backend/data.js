@@ -7,6 +7,13 @@ const data = {
       email: 'vishwarajaug04@gmail.com',
       password: bcrypt.hashSync('12345678'),
       isAdmin: true,
+      isSeller: true,
+      seller: {
+        name: 'Adidas Fit Pant',
+        description: 'high quality product',
+        rating: 4.5,
+        numReviews: 10,
+      },
     },
     {
       name: 'Dhananjay',
