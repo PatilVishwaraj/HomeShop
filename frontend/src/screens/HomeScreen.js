@@ -1,54 +1,68 @@
-import { React, useEffect, useReducer } from 'react';
+import { React, useEffect } from 'react';
 import Prodcard from '../components/Prodcard';
-import axios from 'axios';
 import Loading from '../components/Loading';
 import Popup from '../components/Popup';
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
-      return { ...state, products: action.payload, loading: false };
-    case 'FETCH_FAIL':
-      return { ...state, loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Carousel } from 'react-responsive-carousel';
+import { useDispatch, useSelector } from 'react-redux';
+import { listProducts } from '../actions/productActions';
+import { listTopSellers } from '../actions/userActions';
+import { Link } from 'react-router-dom';
 
 export default function HomeScreen() {
-  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: '',
-    products: [],
-  });
+  const dispatch = useDispatch();
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products } = productList;
+
+  const userTopSellersList = useSelector((state) => state.userTopSellersList);
+  const {
+    loading: loadingSellers,
+    error: errorSellers,
+    users: sellers,
+  } = userTopSellersList;
+
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch({ type: 'FETCH_REQUEST' });
-      try {
-        const result = await axios.get('/api/products');
-        dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
-      } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: err.message });
-      }
-    };
-    fetchData();
-  }, []);
+    dispatch(listProducts({}));
+    dispatch(listTopSellers());
+  }, [dispatch]);
 
   return (
     <div>
-      <div className="row center">
-        {loading ? (
-          <Loading />
-        ) : error ? (
-          <Popup variant="error">{error}</Popup>
-        ) : (
-          products.map((product) => (
-            <Prodcard key={product.slug} product={product}></Prodcard>
-          ))
-        )}
-      </div>
+      <h2>Top Sellers</h2>
+      {loadingSellers ? (
+        <Loading></Loading>
+      ) : errorSellers ? (
+        <Popup variant="danger">{errorSellers}</Popup>
+      ) : (
+        <>
+          {sellers.length === 0 && <Popup>No Seller Found</Popup>}
+          <Carousel showArrows autoPlay showThumbs={false}>
+            {sellers.map((seller) => (
+              <div key={seller._id}>
+                <Link to={`/seller/${seller._id}`}>
+                  <img src={seller.seller.logo} alt={seller.seller.name} />
+                  <p className="legend">{seller.seller.name}</p>
+                </Link>
+              </div>
+            ))}
+          </Carousel>
+        </>
+      )}
+      <h2>Featured Products</h2>
+      {loading ? (
+        <Loading></Loading>
+      ) : error ? (
+        <Popup variant="danger">{error}</Popup>
+      ) : (
+        <>
+          {products.length === 0 && <Popup>No Product Found</Popup>}
+          <div className="row center">
+            {products.map((product) => (
+              <Prodcard key={product._id} product={product}></Prodcard>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

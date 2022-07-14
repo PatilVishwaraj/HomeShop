@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { Store } from '../Store';
+import React, { useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
@@ -10,25 +9,32 @@ import { Button, ButtonGroup } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import axios from 'axios';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useLocation } from 'react-router-dom';
+import { addToCart, removeFromCart } from '../actions/cartActions';
 
 export default function CartScreen() {
   const navigate = useNavigate();
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const {
-    cart: { cartItems },
-  } = state;
+  const params = useParams();
+  const { id: productId } = params;
 
-  const updateCartHandeler = async (item, quantity) => {
-    const { data } = await axios.get(`/api/products/${item._id}`);
-    if (data.countInStock < quantity) {
-      window.alert('Sorry, Product is out of stock');
-      return;
+  const { search } = useLocation();
+  const qtyInUrl = new URLSearchParams(search).get('qty');
+  const qty = qtyInUrl ? Number(qtyInUrl) : 1;
+
+  const cart = useSelector((state) => state.cart);
+  const { cartItems, error } = cart;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (productId) {
+      dispatch(addToCart(productId, qty));
     }
-    ctxDispatch({ type: 'ADD_TO_CART', payload: { ...item, quantity } });
-  };
-  const removeItemHandeler = (item) => {
-    ctxDispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+  }, [dispatch, productId, qty]);
+
+  const removeItemHandeler = (id) => {
+    // delete action
+    dispatch(removeFromCart(id));
   };
 
   const checkoutHandeler = () => {
@@ -41,6 +47,7 @@ export default function CartScreen() {
       <h1>Shopping Cart</h1>
       <Row>
         <Col md={8}>
+          {error && <Popup variant="danger">{error}</Popup>}
           {cartItems.length === 0 ? (
             <Popup variant="error">
               Cart is empty <Link to="/">Go Shopping</Link>
@@ -48,7 +55,7 @@ export default function CartScreen() {
           ) : (
             <ListGroup>
               {cartItems.map((item) => (
-                <ListGroup.Item key={item._id}>
+                <ListGroup.Item key={item.product}>
                   <Row className="align-items-center">
                     <Col md={4}>
                       <img
@@ -56,8 +63,25 @@ export default function CartScreen() {
                         alt={item.name}
                         className="img-fluid rounded img-thumbnail"
                       ></img>{' '}
-                      <Link to={`/product/${item.slug}`}>{item.name}</Link>
+                      <Link to={`/product/${item.product}`}>{item.name}</Link>
                     </Col>
+                    <div>
+                      <select
+                        value={item.qty}
+                        onChange={(e) =>
+                          dispatch(
+                            addToCart(item.product, Number(e.target.value))
+                          )
+                        }
+                      >
+                        {[...Array(item.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {/*  */}
                     <Col md={3}>
                       <ButtonGroup
                         disableElevation
@@ -66,7 +90,7 @@ export default function CartScreen() {
                       >
                         <Button
                           onClick={() =>
-                            updateCartHandeler(item, item.quantity - 1)
+                            addToCart(item.product, item.quantity - 1)
                           }
                           variant="outlined"
                           disabled={item.quantity === 1}
@@ -76,7 +100,7 @@ export default function CartScreen() {
                         <Button variant="outlined">{item.quantity}</Button>
                         <Button
                           onClick={() =>
-                            updateCartHandeler(item, item.quantity + 1)
+                            addToCart(item.product, item.quantity + 1)
                           }
                           variant="outlined"
                           disabled={item.quantity === item.countInStock}
@@ -85,6 +109,7 @@ export default function CartScreen() {
                         </Button>
                       </ButtonGroup>
                     </Col>
+                    {/*  */}
                     <Col md={3}>₹{item.price}</Col>
                     <Col md={2}>
                       <Button

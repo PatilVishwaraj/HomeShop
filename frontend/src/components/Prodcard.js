@@ -30,13 +30,13 @@ export default function Prodcard(props) {
   };
   return (
     <Card sx={{ maxWidth: 345, marginBottom: `1rem` }}>
-      <Link to={`/product/${product.slug}`}>
+      <Link to={`/product/${product.name}`}>
         <CardMedia component="img" height="400" image={product.image} />
       </Link>
       <CardContent>
         <Link
           style={{ color: `black`, textDecoration: `none` }}
-          to={`/product/${product.slug}`}
+          to={`/product/${product.name}`}
         >
           <Typography gutterBottom variant="h5" component="div">
             {product.name}
