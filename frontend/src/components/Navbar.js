@@ -14,7 +14,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
-import { Store } from '../Store';
+import { Store } from '../Store.js';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
