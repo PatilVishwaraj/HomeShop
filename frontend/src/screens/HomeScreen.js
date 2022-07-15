@@ -2,11 +2,11 @@ import { React, useEffect } from 'react';
 import Prodcard from '../components/Prodcard';
 import Loading from '../components/Loading';
 import Popup from '../components/Popup';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+// import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts } from '../actions/productActions';
-import { listTopSellers } from '../actions/userActions';
+// import { listTopSellers } from '../actions/userActions';
 import { Link } from 'react-router-dom';
 
 export default function HomeScreen() {
@@ -23,7 +23,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     dispatch(listProducts({}));
-    dispatch(listTopSellers());
+    // dispatch(listTopSellers());
   }, [dispatch]);
 
   return (
