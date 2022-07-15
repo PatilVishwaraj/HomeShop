@@ -19,7 +19,6 @@ orderRouter.get(
   expressAsyncHandler(async (req, res) => {
     const seller = req.query.seller || '';
     const sellerFilter = seller ? { seller } : {};
-
     const orders = await Order.find({ ...sellerFilter }).populate(
       'user',
       'name'
@@ -159,7 +158,6 @@ orderRouter.put(
       } catch (err) {
         console.log(err);
       }
-
       res.send({ message: 'Order Paid', order: updatedOrder });
     } else {
       res.status(404).send({ message: 'Order Not Found' });
@@ -191,7 +189,6 @@ orderRouter.put(
     if (order) {
       order.isDelivered = true;
       order.deliveredAt = Date.now();
-
       const updatedOrder = await order.save();
       res.send({ message: 'Order Delivered', order: updatedOrder });
     } else {
