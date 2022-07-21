@@ -4,28 +4,38 @@ import http from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import path from 'path';
-import productRouter from './routes/productRoutes.js';
-import userRouter from './routes/userRouter.js';
-import orderRouter from './routes/orderRouter.js';
-import uploadRouter from './routes/uploadRouter.js';
+import connect from './config/db.js';
+// const connect = require(`./config/db`);
+// import productRouter from './routes/productRoutes.js';
+// import userRouter from './routes/userRouter.js';
+// import orderRouter from './routes/orderRouter.js';
+// import uploadRouter from './routes/uploadRouter.js';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// const db = process.env.MONGODB_URL || 'mongodb://localhost/homeshop';
+// mongoose
+//   .connect(db, { useNewUrlParser: true })
+//   .then(() => {
+//     console.log('connected successfully');
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/homeshop');
-app.use('/api/uploads', uploadRouter);
-app.use('/api/users', userRouter);
-app.use('/api/products', productRouter);
-app.use('/api/orders', orderRouter);
-app.get('/api/config/paypal', (req, res) => {
-  res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
-});
-app.get('/api/config/google', (req, res) => {
-  res.send(process.env.GOOGLE_API_KEY || '');
-});
+// app.use('/api/uploads', uploadRouter);
+// app.use('/api/users', userRouter);
+// app.use('/api/products', productRouter);
+// app.use('/api/orders', orderRouter);
+// app.get('/api/config/paypal', (req, res) => {
+//   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
+// });
+// app.get('/api/config/google', (req, res) => {
+//   res.send(process.env.GOOGLE_API_KEY || '');
+// });
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 app.use(express.static(path.join(__dirname, '/frontend/build')));
@@ -37,7 +47,15 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8888;
+app.listen(port, async () => {
+  try {
+    await connect();
+    console.log('connect success');
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const httpServer = http.Server(app);
 const io = new Server(httpServer, { cors: { origin: '*' } });
@@ -111,6 +129,6 @@ io.on('connection', (socket) => {
   });
 });
 
-httpServer.listen(port, () => {
-  console.log(`Serve at http://localhost:${port}`);
-});
+// httpServer.listen(port, () => {
+//   console.log(`Serve at http://localhost:${port}`);
+// });
