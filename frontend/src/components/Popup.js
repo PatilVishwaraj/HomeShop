@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 export default function Popup(props) {
   return (
     <Stack sx={{ width: '100%' }} spacing={2}>
-      <Alert severity={props.variant || 'info'}>{props.children}</Alert>
+      <Alert severity="error">{props.children}</Alert>
     </Stack>
   );
 }

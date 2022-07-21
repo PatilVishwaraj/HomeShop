@@ -55,7 +55,7 @@ function App() {
               <i className="fa fa-bars"></i>
             </button>
             <Link className="brand" to="/">
-              amazona
+              HomeShop
             </Link>
           </div>
           <div>
@@ -173,6 +173,14 @@ function App() {
               exact
             ></Route>
             <Route path="/signin" element={<SigninScreen />}></Route>
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <ProfileScreen />
+                </PrivateRoute>
+              }
+            />
             <Route path="/register" element={<RegisterScreen />}></Route>
             <Route path="/shipping" element={<ShippingAddressScreen />}></Route>
             <Route path="/payment" element={<PaymentMethodScreen />}></Route>
@@ -211,21 +219,6 @@ function App() {
             </PrivateRoute> */}
             <Route path="/" element={<HomeScreen />}></Route>
           </Routes>
-
-          <main>
-            <Routes>
-              <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <ProfileScreen />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/" element={<HomeScreen />} exact></Route>
-            </Routes>
-          </main>
-
           <Footer />
         </main>
       </div>
