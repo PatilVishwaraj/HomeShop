@@ -14,7 +14,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
-import { Store } from '../Store.js';
+import { store } from '../store.js';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,7 +58,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimaryNavbar(props) {
   const { cart } = props;
-  const { state, dispatch: ctxDispatch } = React.useContext(Store);
+  const { state, dispatch: ctxDispatch } = React.useContext(store);
   const { userInfo } = state;
   console.log(userInfo);
   const [anchorEl, setAnchorEl] = React.useState(null);

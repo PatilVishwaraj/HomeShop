@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Store } from '../Store';
+import { store } from '../store.js';
 
 export default function SigninScreen() {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export default function SigninScreen() {
   const redirect = redirectInUrl ? redirectInUrl : '/';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(store);
   const { userInfo } = state;
   const handleSubmit = async (e) => {
     e.preventDefault();

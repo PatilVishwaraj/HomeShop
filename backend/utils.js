@@ -65,5 +65,7 @@ export const mailgun = () =>
   });
 
 export const payOrderEmailTemplate = (order) => {
-  return <h3>Thanks for shopping with us.</h3>;
+  return `<div>
+      <h3>Thanks for shopping with us.</h3>;
+    </div>`;
 };

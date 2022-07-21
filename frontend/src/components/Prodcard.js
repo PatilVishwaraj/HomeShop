@@ -7,13 +7,13 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Rating from './Rating';
 import { Link } from 'react-router-dom';
-import { Store } from '../Store';
+import { store } from '../store.js';
 import { useContext } from 'react';
 import axios from 'axios';
 
 export default function Prodcard(props) {
   const { product } = props;
-  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(store);
   const {
     cart: { cartItems },
   } = state;
